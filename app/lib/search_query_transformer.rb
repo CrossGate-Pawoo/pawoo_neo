@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
 class SearchQueryTransformer < Parslet::Transform
-  SUPPORTED_PREFIXES = %w(
-    has
-    is
-    language
-    from
-    before
-    after
-    during
-  ).freeze
-
   class Query
     attr_reader :must_not_clauses, :must_clauses, :filter_clauses
 
@@ -149,26 +139,18 @@ class SearchQueryTransformer < Parslet::Transform
   end
 
   rule(clause: subtree(:clause)) do
-    prefix   = clause[:prefix][:term].to_s if clause[:prefix]
+    prefix   = clause[:prefix][:prefix_operator].to_s if clause[:prefix]
     operator = clause[:operator]&.to_s
 
-    if clause[:prefix] && SUPPORTED_PREFIXES.include?(prefix)
+    if clause[:prefix]
       PrefixClause.new(prefix, operator, clause[:term].to_s, current_account: current_account)
-    elsif clause[:prefix]
-      TermClause.new(operator, "#{prefix} #{clause[:term]}")
     elsif clause[:term]
       TermClause.new(operator, clause[:term].to_s)
-    elsif clause[:shortcode]
-      TermClause.new(operator, ":#{clause[:term]}:")
     elsif clause[:phrase]
-      PhraseClause.new(operator, clause[:phrase].is_a?(Array) ? clause[:phrase].map { |p| p[:term].to_s }.join(' ') : clause[:phrase].to_s)
+      PhraseClause.new(operator, clause[:phrase].to_s)
     else
       raise "Unexpected clause type: #{clause}"
     end
-  end
-
-  rule(junk: subtree(:junk)) do
-    nil
   end
 
   rule(query: sequence(:clauses)) do
