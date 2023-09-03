@@ -9,10 +9,10 @@ import { List as ImmutableList } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { expandSearch } from 'mastodon/actions/search';
+import { submitSearch, expandSearch } from 'mastodon/actions/search';
 import { ImmutableHashtag as Hashtag } from 'mastodon/components/hashtag';
 import { LoadMore } from 'mastodon/components/load_more';
-import { LoadingIndicator } from 'mastodon/components/loading_indicator';
+import ScrollableList from 'mastodon/components/scrollable_list';
 import Account from 'mastodon/containers/account_container';
 import Status from 'mastodon/containers/status_container';
 
@@ -24,11 +24,14 @@ const mapStateToProps = state => ({
   isLoading: state.getIn(['search', 'isLoading']),
   results: state.getIn(['search', 'results']),
   q: state.getIn(['search', 'searchTerm']),
+  submittedType: state.getIn(['search', 'type']),
 });
 
+const INITIAL_PAGE_LIMIT = 10;
+
 const appendLoadMore = (id, list, onLoadMore) => {
-  if (list.size >= 5) {
-    return list.push(<LoadMore key={`${id}-load-more`} visible onClick={onLoadMore} />);
+  if (onLoadMore && list.size > INITIAL_PAGE_LIMIT && list.size % INITIAL_PAGE_LIMIT === 1) {
+    return list.skipLast(1).add(<LoadMore key={`${id}-load-more`} visible onClick={onLoadMore} />);
   } else {
     return list;
   }
@@ -49,59 +52,127 @@ const renderStatuses = (results, onLoadMore) => appendLoadMore('statuses', resul
 class Results extends PureComponent {
 
   static propTypes = {
-    results: ImmutablePropTypes.map,
+    results: ImmutablePropTypes.contains({
+      accounts: ImmutablePropTypes.orderedSet,
+      statuses: ImmutablePropTypes.orderedSet,
+      hashtags: ImmutablePropTypes.orderedSet,
+    }),
     isLoading: PropTypes.bool,
     multiColumn: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     q: PropTypes.string,
     intl: PropTypes.object,
+    submittedType: PropTypes.oneOf(['accounts', 'statuses', 'hashtags']),
   };
 
   state = {
-    type: 'all',
+    type: this.props.submittedType || 'all',
   };
 
-  handleSelectAll = () => this.setState({ type: 'all' });
-  handleSelectAccounts = () => this.setState({ type: 'accounts' });
-  handleSelectHashtags = () => this.setState({ type: 'hashtags' });
-  handleSelectStatuses = () => this.setState({ type: 'statuses' });
-  handleLoadMoreAccounts = () => this.loadMore('accounts');
-  handleLoadMoreStatuses = () => this.loadMore('statuses');
-  handleLoadMoreHashtags = () => this.loadMore('hashtags');
+  static getDerivedStateFromProps(props, state) {
+    if (props.submittedType !== state.type) {
+      return {
+        type: props.submittedType || 'all',
+      };
+    }
 
-  loadMore (type) {
+    return null;
+  };
+
+  handleSelectAll = () => {
+    const { submittedType, dispatch } = this.props;
+
+    // If we originally searched for a specific type, we need to resubmit
+    // the query to get all types of results
+    if (submittedType) {
+      dispatch(submitSearch());
+    }
+
+    this.setState({ type: 'all' });
+  };
+
+  handleSelectAccounts = () => {
+    const { submittedType, dispatch } = this.props;
+
+    // If we originally searched for something else (but not everything),
+    // we need to resubmit the query for this specific type
+    if (!!submittedType && submittedType !== 'accounts') {
+      dispatch(submitSearch('accounts'));
+    }
+
+    this.setState({ type: 'accounts' });
+  };
+
+  handleSelectHashtags = () => {
+    const { submittedType, dispatch } = this.props;
+
+    // If we originally searched for something else (but not everything),
+    // we need to resubmit the query for this specific type
+    if (!!submittedType && submittedType !== 'hashtags') {
+      dispatch(submitSearch('hashtags'));
+    }
+
+    this.setState({ type: 'hashtags' });
+  }
+
+  handleSelectStatuses = () => {
+    const { submittedType, dispatch } = this.props;
+
+    // If we originally searched for something else (but not everything),
+    // we need to resubmit the query for this specific type
+    if (!!submittedType && submittedType !== 'statuses') {
+      dispatch(submitSearch('statuses'));
+    }
+
+    this.setState({ type: 'statuses' });
+  }
+
+  handleLoadMoreAccounts = () => this._loadMore('accounts');
+  handleLoadMoreStatuses = () => this._loadMore('statuses');
+  handleLoadMoreHashtags = () => this._loadMore('hashtags');
+
+  _loadMore (type) {
     const { dispatch } = this.props;
     dispatch(expandSearch(type));
   }
+
+  handleLoadMore = () => {
+    const { type } = this.state;
+
+    if (type !== 'all') {
+      this._loadMore(type);
+    }
+  };
 
   render () {
     const { intl, isLoading, q, results } = this.props;
     const { type } = this.state;
 
-    let filteredResults = ImmutableList();
+    // We request 1 more result than we display so we can tell if there'd be a next page
+    const hasMore = type !== 'all' ? results.get(type, ImmutableList()).size > INITIAL_PAGE_LIMIT && results.get(type).size % INITIAL_PAGE_LIMIT === 1 : false;
+
+    let filteredResults;
 
     if (!isLoading) {
       switch(type) {
       case 'all':
-        filteredResults = filteredResults.concat(renderAccounts(results, this.handleLoadMoreAccounts), renderHashtags(results, this.handleLoadMoreHashtags), renderStatuses(results, this.handleLoadMoreStatuses));
+        filteredResults = (
+          <>
+            {renderAccounts(results, this.handleLoadMoreAccounts)}
+            {renderHashtags(results, this.handleLoadMoreHashtags)}
+            {renderStatuses(results, this.handleLoadMoreStatuses)}
+          </>
+        );
         break;
       case 'accounts':
-        filteredResults = filteredResults.concat(renderAccounts(results, this.handleLoadMoreAccounts));
+        filteredResults = renderAccounts(results);
         break;
       case 'hashtags':
-        filteredResults = filteredResults.concat(renderHashtags(results, this.handleLoadMoreHashtags));
+        filteredResults = renderHashtags(results);
         break;
       case 'statuses':
-        filteredResults = filteredResults.concat(renderStatuses(results, this.handleLoadMoreStatuses));
+        filteredResults = renderStatuses(results);
         break;
-      }
-
-      if (filteredResults.size === 0) {
-        filteredResults = (
-          <div className='empty-column-indicator'>
-            <FormattedMessage id='search_results.nothing_found' defaultMessage='Could not find anything for these search terms' />
-          </div>
-        );
       }
     }
 
@@ -115,7 +186,16 @@ class Results extends PureComponent {
         </div>
 
         <div className='explore__search-results'>
-          {isLoading ? <LoadingIndicator /> : filteredResults}
+          <ScrollableList
+            scrollKey='search-results'
+            isLoading={isLoading}
+            onLoadMore={this.handleLoadMore}
+            hasMore={hasMore}
+            emptyMessage={<FormattedMessage id='search_results.nothing_found' defaultMessage='Could not find anything for these search terms' />}
+            bindToDocument
+          >
+            {filteredResults}
+          </ScrollableList>
         </div>
 
         <Helmet>
