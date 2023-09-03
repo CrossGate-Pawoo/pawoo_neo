@@ -796,6 +796,14 @@ sl:
     site_uploads:
       delete: Izbriši naloženo datoteko
       destroyed_msg: Prenos na strežnik uspešno izbrisan!
+    software_updates:
+      documentation_link: Več o tem
+      release_notes: Opombe ob izdaji
+      title: Razpoložljive posodobitve
+      type: Vrsta
+      types:
+        major: Osrednja izdaja
+      version: Različica
     statuses:
       account: Avtor
       application: Program
@@ -836,6 +844,10 @@ sl:
     system_checks:
       database_schema_check:
         message_html: Na čakanju so migracije zbirke podatkov. Prosimo, izvedite jih, da zagotovite, da se program vede pričakovano
+      elasticsearch_preset:
+        action: Glejte dokumentacijo
+      elasticsearch_preset_single_node:
+        action: Glejte dokumentacijo
       elasticsearch_running_check:
         message_html: Povezava z Elasticsearch ni uspela. Preverite, da deluje, ali onemogočite iskanje po vsem besedilu
       elasticsearch_version_check:
@@ -1492,6 +1504,9 @@ sl:
     other: Ostalo
     posting_defaults: Privzete nastavitev objavljanja
     public_timelines: Javne časovnice
+  privacy:
+    privacy: Zasebnost
+    search: Iskanje
   privacy_policy:
     title: Pravilnik o zasebnosti
   reactions:

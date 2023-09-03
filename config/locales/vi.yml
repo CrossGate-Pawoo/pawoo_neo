@@ -800,6 +800,20 @@ vi:
     system_checks:
       database_schema_check:
         message_html: Có cơ sở dữ liệu đang chờ xử lý. Xin khởi động nó để ứng dụng có thể hoạt động một cách ổn định nhất
+      elasticsearch_health_red:
+        message_html: Cụm Elaticsearch không tốt (trạng thái đỏ), tính năng tìm kiếm không khả dụng
+      elasticsearch_health_yellow:
+        message_html: Cụm Elaticsearch không tốt (trạng thái vàng), bạn có thể muốn biết lý do
+      elasticsearch_index_mismatch:
+        message_html: Mapping chỉ mục Elaticsearch đã lỗi thời. Hãy chạy <code>tootctl search deploy --only=%{value}</code>
+      elasticsearch_preset:
+        action: Xem tài liệu
+        message_html: Cụm Elaticsearch của bạn có nhiều node nhưng Mastodon không được định cấu hình để sử dụng chúng.
+      elasticsearch_preset_single_node:
+        action: Xem tài liệu
+        message_html: Cụm Elaticsearch của bạn chỉ có một node, <code>ES_PRESET</code> nên đặt thành <code>single_node_cluster</code>.
+      elasticsearch_reset_chewy:
+        message_html: Chỉ mục hệ thống Elaticsearch của bạn đã lỗi thời do thay đổi cài đặt. Hãy chạy <code>tootctl search deploy --reset-chewy</code> để cập nhật.
       elasticsearch_running_check:
         message_html: Không thể kết nối Elasticsearch. Hãy kiểm tra xem nó có đang chạy, hay tìm kiếm full-text bị tắt
       elasticsearch_version_check:
@@ -1406,6 +1420,7 @@ vi:
     update:
       subject: "%{name} đã sửa một tút"
   notifications:
+    administration_emails: Email thông báo admin
     email_events: Email
     email_events_hint: 'Chọn những hoạt động sẽ gửi thông báo qua email:'
     other_settings: Chặn thông báo từ
@@ -1449,6 +1464,15 @@ vi:
     other: Khác
     posting_defaults: Mặc định cho tút
     public_timelines: Bảng tin
+  privacy:
+    hint_html: "<strong>Tùy chỉnh cách mọi người tìm thấy hồ sơ và các tút của bạn.</strong> Nhiều tính năng trong Mastodon có thể giúp bạn tiếp cận nhiều đối tượng hơn khi được bật. Hãy xem lại các cài đặt này để đảm bảo chúng phù hợp với bạn."
+    privacy: Riêng tư
+    privacy_hint_html: Kiểm soát mức độ chi tiết bạn muốn tiết lộ. Mọi người khám phá các hồ sơ thú vị và các ứng dụng thú vị bằng cách theo dõi những người khác và xem họ đăng từ ứng dụng nào, nhưng có thể bạn muốn ẩn nó đi.
+    reach: Tiếp cận
+    reach_hint_html: Kiểm soát cách bạn được khám phá và theo dõi. Bạn có muốn tút của mình xuất hiện trên màn hình Khám phá không? Bạn có muốn người khác nhìn thấy bạn trong các đề xuất theo dõi của họ không? Bạn muốn tự động chấp nhận tất cả những người theo dõi mới hay tự duyệt từng người theo dõi?
+    search: Tìm kiếm
+    search_hint_html: Kiểm soát cách tìm thấy bạn. Bạn có muốn mọi người tìm thấy bạn bằng những gì bạn đã đăng công khai không? Bạn có muốn những người bên ngoài Mastodon tìm thấy hồ sơ của bạn khi tìm kiếm trên web không? Xin lưu ý rằng không thể đảm bảo loại trừ hoàn toàn khỏi tất cả các công cụ tìm kiếm đối với thông tin công khai.
+    title: Riêng tư và tiếp cận
   privacy_policy:
     title: Chính sách bảo mật
   reactions:
@@ -1652,6 +1676,10 @@ vi:
       default: "%-d.%m.%Y %H:%M"
       month: "%B %Y"
       time: "%H:%M"
+  translation:
+    errors:
+      quota_exceeded: Đã vượt quá hạn ngạch sử dụng trên toàn máy chủ cho dịch vụ dịch thuật.
+      too_many_requests: Gần đây có quá nhiều yêu cầu dịch vụ dịch thuật.
   two_factor_authentication:
     add: Thêm
     disable: Vô hiệu hóa

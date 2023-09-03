@@ -870,6 +870,20 @@ cy:
     system_checks:
       database_schema_check:
         message_html: Mae mudo cronfa ddata ar fin digwydd. Rhedwch nhw i sicrhau bod y rhaglen yn ymddwyn yn ôl y disgwyl
+      elasticsearch_health_red:
+        message_html: Mae clwstwr Elasticsearch yn afiach (statws coch), nid yw'r nodweddion chwilio ar gael
+      elasticsearch_health_yellow:
+        message_html: Mae clwstwr Elasticsearch yn afiach (statws melyn), efallai y byddwch am ymchwilio i'r rheswm
+      elasticsearch_index_mismatch:
+        message_html: Mae mapiau mynegai Elasticsearch yn hen ffasiwn. Rhedwch <code>tootctl search deploy --only=%{value}</code>
+      elasticsearch_preset:
+        action: Darllenwch y ddogfennaeth
+        message_html: Mae gan eich clwstwr Elasticsearch fwy nag un nod, ond nid yw Mastodon wedi'i ffurfweddu i'w defnyddio.
+      elasticsearch_preset_single_node:
+        action: Darllenwch y ddogfennaeth
+        message_html: Dim ond un nod sydd gan eich clwstwr Elasticsearch, mae angen gosod <code>ES_PRESET</code> i <code>single_node_cluster</code> .
+      elasticsearch_reset_chewy:
+        message_html: Mae eich mynegai system Elasticsearch wedi dyddio oherwydd newid gosodiad. Rhedwch chwiliad <code>tootctl search deploy --reset-chewy</code> i'w ddiweddaru.
       elasticsearch_running_check:
         message_html: Methu cysylltu ag Elasticsearch. Gwiriwch ei fod yn rhedeg, neu analluogwch chwiliad testun llawn
       elasticsearch_version_check:
@@ -1536,6 +1550,7 @@ cy:
     update:
       subject: Golygodd %{name} bostiad
   notifications:
+    administration_emails: Hysbysiadau e-bost gweinyddol
     email_events: Digwyddiadau ar gyfer hysbysiadau e-bost
     email_events_hint: 'Dewiswch ddigwyddiadau yr ydych am dderbyn hysbysiadau ar eu cyfer:'
     other_settings: Gosodiadau hysbysiadau arall
@@ -1579,6 +1594,15 @@ cy:
     other: Arall
     posting_defaults: Rhagosodiadau postio
     public_timelines: Ffrydiau cyhoeddus
+  privacy:
+    hint_html: "<strong>Cyfaddaswch sut rydych chi am i'ch proffil a'ch postiadau gael eu canfod.</strong> Gall amrywiaeth o nodweddion yn Mastodon eich helpu i gyrraedd cynulleidfa ehangach pan fyddwch wedi'ch eu galluogi. Cymerwch eiliad i adolygu'r gosodiadau hyn i sicrhau eu bod yn cyd-fynd â'ch pwrpas defnydd."
+    privacy: Preifatrwydd
+    privacy_hint_html: Rheolwch faint rydych chi am ei ddatgelu er budd eraill. Mae pobl yn darganfod proffiliau diddorol ac apiau difyr trwy bori trwy ddilynwyr pobl eraill a gweld o ba apiau maen nhw'n postio, ond efallai y byddai'n well gennych ei gadw'n gudd.
+    reach: Ymestyn
+    reach_hint_html: Rheolwch a ydych am gael eich darganfod a'ch dilyn gan bobl newydd. Ydych chi am i'ch postiadau ymddangos ar y sgrin Archwilio? Ydych chi am i bobl eraill eich gweld chi yn eu hargymhellion dilynol? Ydych chi am dderbyn pob dilynwr newydd yn awtomatig, neu gael rheolaeth gronynnog dros bob un?
+    search: Chwilio
+    search_hint_html: Rheolwch sut rydych chi am gael eich darganfod. Ydych chi am i bobl ddod o hyd i chi yn ôl yr hyn rydych chi wedi'i bostio'n gyhoeddus amdano? Ydych chi eisiau i bobl y tu allan i Mastodon ddod o hyd i'ch proffil wrth chwilio'r we? Cofiwch nad oes modd gwarantu gwaharddiad llwyr o bob peiriant chwilio ynghylch gwybodaeth gyhoeddus.
+    title: Preifatrwydd a chyrhaeddiad
   privacy_policy:
     title: Polisi preifatrwydd
   reactions:
@@ -1656,7 +1680,7 @@ cy:
       ios: iOS
       kai_os: KaiOS
       linux: Linux
-      mac: Mac
+      mac: macOS
       unknown_platform: Platfform Anhysbys
       windows: Windows
       windows_mobile: Windows Mobile
@@ -1812,6 +1836,10 @@ cy:
       default: "%b %d, %Y, %H:%M"
       month: "%b %Y"
       time: "%H:%M"
+  translation:
+    errors:
+      quota_exceeded: Aethpwyd y tu hwnt i gwota defnydd y gweinydd cyfan ar gyfer y gwasanaeth cyfieithu.
+      too_many_requests: Bu gormod o geisiadau i'r gwasanaeth cyfieithu yn ddiweddar.
   two_factor_authentication:
     add: Ychwanegu
     disable: Analluogi 2FA

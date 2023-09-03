@@ -5,6 +5,7 @@ sl:
       account:
         display_name: Vaše polno ime ali lažno ime.
         fields: Vaša domača stran, starost, kar koli.
+        indexable: Vaše javne objave se lahko pojavijo v rezultatih iskanja na Mastodonu. Ljudje, ki so bili v interakciji z vašimi objavami, jih bodo lahko iskali ne glede na to.
         note: 'Druge osebe lahko @omenite ali #ključnite.'
       account_alias:
         acct: Določite uporabniškoime@domena računa, od katerega se želite preseliti
@@ -136,6 +137,9 @@ sl:
         fields:
           name: Oznaka
           value: Vsebina
+        indexable: Med zadetke iskanja vključi javne objave
+        show_collections: Pokaži sledene in sledilce v profilu
+        unlocked: Samodejno sprejmi nove sledilce
       account_alias:
         acct: Ročica starega računa
       account_migration:
@@ -283,6 +287,9 @@ sl:
         trending_tag: Nov trend zahteva pregled
       rule:
         text: Pravilo
+      settings:
+        indexable: V iskalnike vključi stran profila
+        show_application: Pokaži, iz katerega programa je poslana objava
       tag:
         listable: Dovoli, da se ta ključnik pojavi v iskanjih in predlogih
         name: Ključnik
