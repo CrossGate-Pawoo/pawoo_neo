@@ -21,6 +21,10 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   skip_before_action :require_functional!, only: [:edit, :update]
 
+  content_security_policy only: :new do |p|
+    p.form_action(false)
+  end
+
   def new
     super(&:build_invite_request)
   end
