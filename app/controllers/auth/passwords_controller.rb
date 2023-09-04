@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Auth::PasswordsController < Devise::PasswordsController
+  skip_before_action :require_no_authentication, only: [:edit, :update]
   before_action :check_validity_of_reset_password_token, only: :edit
   before_action :set_body_classes
 

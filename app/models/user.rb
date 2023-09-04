@@ -53,6 +53,7 @@ class User < ApplicationRecord
   include Settings::Extend
   include Redisable
   include LanguagesHelper
+  include Pawoo::UserExtension
 
   # The home and list feeds will be stored in Redis for this amount
   # of time, and status fan-out to followers will include only people

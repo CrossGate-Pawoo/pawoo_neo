@@ -2,6 +2,7 @@
 
 class Auth::RegistrationsController < Devise::RegistrationsController
   include RegistrationSpamConcern
+  include Pawoo::Auth::RegistrationsControllerConcern
 
   layout :determine_layout
 

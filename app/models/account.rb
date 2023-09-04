@@ -77,6 +77,7 @@ class Account < ApplicationRecord
   include DomainNormalizable
   include DomainMaterializable
   include AccountMerging
+  include Pawoo::AccountExtension
 
   enum protocol: [:ostatus, :activitypub]
   enum suspension_origin: [:local, :remote], _prefix: true

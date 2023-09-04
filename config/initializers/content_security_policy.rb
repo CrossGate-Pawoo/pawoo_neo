@@ -16,6 +16,9 @@ media_host ||= host_to_url(ENV['S3_CLOUDFRONT_HOST'])
 media_host ||= host_to_url(ENV['S3_HOSTNAME']) if ENV['S3_ENABLED'] == 'true'
 media_host ||= assets_host
 
+# pixiv_host = host_to_url(ENV['OAUTH_PIXIV_AUTHORIZE_URL'])
+pawoo_script_src = ['https://www.google-analytics.com', 'https://ssl.google-analytics.com', 'https://www.recaptcha.net', 'https://www.gstatic.com']
+
 Rails.application.config.content_security_policy do |p|
   p.base_uri        :none
   p.default_src     :none
@@ -32,12 +35,12 @@ Rails.application.config.content_security_policy do |p|
     webpacker_urls = %w(ws http).map { |protocol| "#{protocol}#{Webpacker.dev_server.https? ? 's' : ''}://#{Webpacker.dev_server.host_with_port}" }
 
     p.connect_src :self, :data, :blob, assets_host, media_host, Rails.configuration.x.streaming_api_base_url, *webpacker_urls
-    p.script_src  :self, :unsafe_inline, :unsafe_eval, assets_host
+    p.script_src  :self, :unsafe_inline, :unsafe_eval, assets_host, *pawoo_script_src
     p.child_src   :self, :blob, assets_host
     p.worker_src  :self, :blob, assets_host
   else
     p.connect_src :self, :data, :blob, assets_host, media_host, Rails.configuration.x.streaming_api_base_url
-    p.script_src  :self, assets_host, "'wasm-unsafe-eval'"
+    p.script_src  :self, assets_host, *pawoo_script_src, "'wasm-unsafe-eval'"
     p.child_src   :self, :blob, assets_host
     p.worker_src  :self, :blob, assets_host
   end

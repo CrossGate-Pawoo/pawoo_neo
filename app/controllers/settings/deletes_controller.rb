@@ -7,6 +7,11 @@ class Settings::DeletesController < Settings::BaseController
 
   def show
     @confirmation = Form::DeleteConfirmation.new
+
+    if current_user.initial_password_usage
+      render 'pawoo/extensions/settings/deletes/show_for_initial_password_usage'
+      return
+    end
   end
 
   def destroy

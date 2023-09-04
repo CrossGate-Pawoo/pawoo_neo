@@ -25,6 +25,9 @@
 
     .actions
       - resource_class.omniauth_providers.each do |provider|
-        = provider_sign_in_link(provider)
+        - if provider == :pixiv
+          = render 'oauth/authorizations/pixiv_auth', auth_type: 'signin'
+        - else
+          = provider_sign_in_link(provider)
 
 .form-footer= render 'auth/shared/links'

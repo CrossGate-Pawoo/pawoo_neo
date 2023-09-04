@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
@@ -162,6 +163,30 @@ class Header extends ImmutablePureComponent {
       if (e.name !== 'AbortError') console.error(e);
     });
   };
+
+  pawooRenderOauthAthenticationsIcon(account) {
+    if (account.getIn(['oauth_authentications'], new Immutable.List()).size > 0) {
+      return (
+        <div className='pawoo-account__header__oauth-authentications pawoo-oauth-authentications'>
+          {account.getIn(['oauth_authentications'], new Immutable.List()).map(oauth_authentication => {
+            const provider = oauth_authentication.get('provider');
+
+            if (provider === 'pixiv') {
+              return (
+                <a key={provider} href={`https://www.pixiv.net/users/${oauth_authentication.get('uid')}`} target='_blank' rel='noopener'>
+                  <div className='pawoo-oauth-authentication pixiv' />
+                </a>
+              );
+            }
+
+            return <div key={provider} />;
+          })}
+        </div>
+      );
+    }
+
+    return null;
+  }
 
   render () {
     const { account, hidden, intl, domain } = this.props;
@@ -357,6 +382,7 @@ class Header extends ImmutablePureComponent {
                 <span>@{acct}</span> {lockedIcon}
               </small>
             </h1>
+            {this.pawooRenderOauthAthenticationsIcon(account)}
           </div>
 
           {!(suspended || hidden) && (

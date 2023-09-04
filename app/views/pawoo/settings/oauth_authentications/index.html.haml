@@ -1,0 +1,36 @@
+- content_for :page_title do
+  = t('settings.oauth_authentications')
+
+- if current_user.initial_password_usage
+  %p.muted-hint= t('oauth_authentications.initial_password_usage_note_html', link: link_to(t('auth.set_new_password'), edit_user_registration_path))
+
+%p.muted-hint
+  pixivアカウントと連携済みのアカウントには、Pawooとpixivのプロフィールページにリンクが設定されたアイコンが表示されます。
+
+%table.table
+  %thead
+    %tr
+      %th= OauthAuthentication.human_attribute_name(:provider)
+      %th= OauthAuthentication.human_attribute_name(:uid)
+  %tbody
+    - Devise.omniauth_configs.keys.each do |provider|
+      - oauth_authentication = current_user.oauth_authentications.find { |record| record.provider == provider.to_s }
+
+      %tr
+        %td= provider
+        %td
+          - case provider
+          - when :pixiv
+            - if oauth_authentication
+              = link_to oauth_authentication.uid, "https://www.pixiv.net/users/#{oauth_authentication.uid}", target: '_blank'
+            - else
+              = '-'
+        %td
+          - if current_user.initial_password_usage
+            / Do nothing
+          - elsif oauth_authentication
+            = link_to t('oauth_authentications.unlink'), settings_oauth_authentication_path(oauth_authentication), method: :delete, data: { confirm: t('oauth_authentications.confirm') }
+          - elsif provider == :pixiv
+            = link_to t('oauth_authentications.link'), user_pixiv_omniauth_authorize_url, method: :post
+          - else
+            = link_to t('oauth_authentications.link'), public_send(:"user_#{provider}_omniauth_authorize_path")

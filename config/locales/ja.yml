@@ -1,7 +1,10 @@
 ---
 ja:
   about:
-    about_mastodon_html: Mastodonは、オープンなウェブプロトコルを採用した、自由でオープンソースなソーシャルネットワークです。電子メールのような分散型の仕組みを採っています。
+    about_mastodon_html: |
+      マストドンは、所属するインスタンスを選んでアカウントを登録し、トゥートと呼ばれる投稿を通じてコミュニケーションを楽しむSNSです。
+      オープンソースで公開されているため、誰でも自分のインスタンスを立ち上げることが可能である他、様々なインスタンスにアカウントを持つこともできます。
+      また、インスタンス間を超えたやり取りも可能であるため、様々なコミュニティを介したコミュニケーションが展開されています。
     contact_missing: 未設定
     contact_unavailable: N/A
     hosted_on: Mastodon hosted on %{domain}
@@ -1505,9 +1508,9 @@ ja:
       direct: ダイレクト
       private: フォロワー限定
       private_long: フォロワーにのみ表示されます
-      public: 公開
-      public_long: 誰でも見ることができ、かつ公開タイムラインに表示されます
-      unlisted: 未収載
+      public: 全体へ公開
+      public_long: 誰でも見ることができます
+      unlisted: 全体へ公開するが、公開タイムラインには表示しない
       unlisted_long: 誰でも見ることができますが、公開タイムラインには表示されません
   statuses_cleanup:
     enabled: 古い投稿を自動的に削除する

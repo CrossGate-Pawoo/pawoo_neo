@@ -11,6 +11,7 @@ class REST::AccountSerializer < ActiveModel::Serializer
   has_one :moved_to_account, key: :moved, serializer: REST::AccountSerializer, if: :moved_and_not_nested?
 
   has_many :emojis, serializer: REST::CustomEmojiSerializer
+  has_many :oauth_authentications
 
   attribute :suspended, if: :suspended?
   attribute :silenced, key: :limited, if: :silenced?
@@ -78,6 +79,10 @@ class REST::AccountSerializer < ActiveModel::Serializer
 
   def header_static
     full_asset_url(object.suspended? ? object.header.default_url : object.header_static_url)
+  end
+
+  class OauthAuthenticationSerializer < ActiveModel::Serializer
+    attributes :uid, :provider
   end
 
   def created_at
