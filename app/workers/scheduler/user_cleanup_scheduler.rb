@@ -18,6 +18,8 @@ class Scheduler::UserCleanupScheduler
       AccountModerationNote.where(target_account_id: batch.map(&:account_id)).delete_all
       Account.where(id: batch.map(&:account_id)).delete_all
       User.where(id: batch.map(&:id)).delete_all
+      OauthAuthentication.where(user_id: batch.map(&:id)).delete_all
+      InitialPasswordUsage.where(user_id: batch.map(&:id)).delete_all
     end
   end
 

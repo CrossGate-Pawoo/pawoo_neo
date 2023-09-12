@@ -75,12 +75,20 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, path: 'auth', format: false, controllers: {
-    omniauth_callbacks: 'auth/omniauth_callbacks',
+    omniauth_callbacks: 'pawoo/auth/omniauth_callbacks',
     sessions:           'auth/sessions',
     registrations:      'auth/registrations',
     passwords:          'auth/passwords',
     confirmations:      'auth/confirmations',
   }
+
+  devise_scope :user do
+    with_devise_exclusive_scope('/auth', :user, {}) do
+      resource :oauth_registration, only: [:new, :create],
+        controller: 'pawoo/oauth_registrations',
+        path: 'oauth/oauth_registrations'
+    end
+  end
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: lambda { |req| req.format.nil? || req.format.html? }
   get '/users/:username/statuses/:id', to: redirect('/@%{username}/%{id}'), constraints: lambda { |req| req.format.nil? || req.format.html? }
@@ -710,6 +718,14 @@ Rails.application.routes.draw do
 
   web_app_paths.each do |path|
     get path, to: 'home#index'
+  end
+
+  scope module: :pawoo do
+    namespace :settings do
+      resources :oauth_authentications, only: [:index, :destroy]
+    end
+
+    resources :oauth_authentications, only: [:show], param: :uid
   end
 
   get '/web/(*any)', to: redirect('/%{any}', status: 302), as: :web, defaults: { any: '' }, format: false

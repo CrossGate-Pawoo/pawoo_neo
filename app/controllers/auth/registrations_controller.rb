@@ -2,6 +2,7 @@
 
 class Auth::RegistrationsController < Devise::RegistrationsController
   include RegistrationSpamConcern
+  include Pawoo::Auth::RegistrationsControllerConcern
 
   layout :determine_layout
 
@@ -19,6 +20,10 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :set_registration_form_time, only: :new
 
   skip_before_action :require_functional!, only: [:edit, :update]
+
+  content_security_policy only: :new do |p|
+    p.form_action(false)
+  end
 
   def new
     super(&:build_invite_request)

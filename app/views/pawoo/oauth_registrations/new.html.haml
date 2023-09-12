@@ -1,0 +1,37 @@
+- content_for :page_title do
+  = t('auth.oauth_registration')
+
+- content_for :content do
+  .container
+    .logo-container
+      %h1
+        = link_to root_path do
+          = logo_as_symbol(:wordmark)
+
+    = simple_form_for(@oauth_registration, url: user_oauth_registration_path, method: 'POST') do |f|
+      = render 'shared/error_messages', object: f.object
+
+      .pawoo-oauth-registration__body
+        %img{ referrerpolicy: 'origin', src: f.object.avatar }
+        .omniauth
+          .fields-group
+            - if f.object.email_confirmed?
+              = f.input :email, wrapper: :with_label, label: "#{t('simple_form.labels.defaults.email')} #{t('auth.confirmed_email')}", disabled: true, required: true, input_html: { 'aria-label' => "#{t('simple_form.labels.defaults.email')} #{t('auth.confirmed_email')}", :autocomplete => 'off' }
+            - else
+              = f.input :email, wrapper: :with_label, label: t('simple_form.labels.defaults.email'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.email'), :autocomplete => 'off' }
+
+          .fields-group
+            = f.input :username, wrapper: :with_label, autofocus: true, label: t('simple_form.labels.defaults.username'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.username'), :autocomplete => 'off' }, append: "@#{site_hostname}", hint: t('simple_form.hints.defaults.username', domain: site_hostname)
+
+          .fields-group
+            = f.input :display_name, wrapper: :with_label, label: t('simple_form.labels.defaults.display_name'), input_html: { 'aria-label' => t('simple_form.labels.defaults.display_name'), :autocomplete => 'off' }, hint: false
+
+          .fields-group
+            = f.input :note, as: :text, wrapper: :with_label, label: t('simple_form.labels.defaults.note'), input_html: { 'aria-label' => t('simple_form.labels.defaults.note'), :autocomplete => 'off', maxlength: 500, rows: 8 }, hint: false
+
+          .fields-group
+            = f.input :agreement, as: :boolean, wrapper: :with_label, label: t('auth.privacy_policy_agreement_html', rules_path: about_more_path, privacy_policy_path: privacy_policy_path), disabled: closed_registrations?
+
+      .pawoo-oauth-registration__actions.actions
+        = f.button :button, t('auth.register'), type: :submit
+    .form-footer= render 'auth/shared/links'

@@ -37,7 +37,18 @@
   .fields-group
     = f.input :agreement, as: :boolean, wrapper: :with_label, label: t('auth.privacy_policy_agreement_html', rules_path: about_more_path, privacy_policy_path: privacy_policy_path), required: true
 
+  -# .recaptcha
+  -#   = flash[:recaptcha_error]
+  -#   = recaptcha_tags nonce: content_security_policy_nonce
+
   .actions
     = f.button :button, @invite.present? ? t('auth.register') : sign_up_message, type: :submit
+
+- if devise_mapping.omniauthable? and resource_class.omniauth_providers.any?
+  .simple_form.alternative-login
+    %h4= omniauth_only? ? t('auth.log_in_with') : t('auth.or_log_in_with')
+
+    .actions
+      = render 'oauth/authorizations/pixiv_auth', auth_type: 'signup'
 
 .form-footer= render 'auth/shared/links'

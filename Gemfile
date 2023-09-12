@@ -158,3 +158,7 @@ gem 'concurrent-ruby', require: false
 gem 'connection_pool', require: false
 gem 'xorcist', '~> 1.1'
 gem 'cocoon', '~> 1.2'
+
+# pawoo
+gem 'omniauth-pixiv-public', require: 'omniauth-pixiv'
+gem 'pixiv_api', git: 'https://github.com/pixiv/pixiv-api-ruby-public.git'

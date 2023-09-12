@@ -23,6 +23,7 @@ SimpleNavigation::Configuration.run do |navigation|
       s.item :password, safe_join([fa_icon('lock fw'), t('settings.account_settings')]), edit_user_registration_path, highlights_on: %r{/auth/edit|/settings/delete|/settings/migration|/settings/aliases|/settings/login_activities|^/disputes}
       s.item :two_factor_authentication, safe_join([fa_icon('mobile fw'), t('settings.two_factor_authentication')]), settings_two_factor_authentication_methods_path, highlights_on: %r{/settings/two_factor_authentication|/settings/otp_authentication|/settings/security_keys}
       s.item :authorized_apps, safe_join([fa_icon('list fw'), t('settings.authorized_apps')]), oauth_authorized_applications_path
+      s.item :oauth_authentications, safe_join([fa_icon('list fw'), t('settings.oauth_authentications')]), settings_oauth_authentications_url, if: -> { current_user.functional? }
     end
 
     n.item :data, safe_join([fa_icon('cloud-download fw'), t('settings.import_and_export')]), settings_export_path do |s|
@@ -51,8 +52,8 @@ SimpleNavigation::Configuration.run do |navigation|
     end
 
     n.item :admin, safe_join([fa_icon('cogs fw'), t('admin.title')]), nil, if: -> { current_user.can?(:view_dashboard, :manage_settings, :manage_rules, :manage_announcements, :manage_custom_emojis, :manage_webhooks, :manage_federation) } do |s|
-      s.item :dashboard, safe_join([fa_icon('tachometer fw'), t('admin.dashboard.title')]), admin_dashboard_path, if: -> { current_user.can?(:view_dashboard) }
       s.item :settings, safe_join([fa_icon('cogs fw'), t('admin.settings.title')]), admin_settings_path, if: -> { current_user.can?(:manage_settings) }, highlights_on: %r{/admin/settings}
+      s.item :dashboard, safe_join([fa_icon('tachometer fw'), t('admin.dashboard.title')]), admin_dashboard_path, if: -> { current_user.can?(:view_dashboard) }
       s.item :rules, safe_join([fa_icon('gavel fw'), t('admin.rules.title')]), admin_rules_path, highlights_on: %r{/admin/rules}, if: -> { current_user.can?(:manage_rules) }
       s.item :roles, safe_join([fa_icon('vcard fw'), t('admin.roles.title')]), admin_roles_path, highlights_on: %r{/admin/roles}, if: -> { current_user.can?(:manage_roles) }
       s.item :announcements, safe_join([fa_icon('bullhorn fw'), t('admin.announcements.title')]), admin_announcements_path, highlights_on: %r{/admin/announcements}, if: -> { current_user.can?(:manage_announcements) }

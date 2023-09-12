@@ -7,6 +7,15 @@ GIT
       hkdf (~> 0.2)
       jwt (~> 2.0)
 
+GIT
+  remote: https://github.com/pixiv/pixiv-api-ruby-public.git
+  revision: 5b45627eb4b62c8188f3c5cf0dc289395da3e18b
+  specs:
+    pixiv_api (0.3.0)
+      activesupport (>= 4.0)
+      memoizable (>= 0.4)
+      oauth2 (>= 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -399,6 +408,8 @@ GEM
     mario-redis-lock (1.2.1)
       redis (>= 3.0.5)
     matrix (0.4.2)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
     memory_profiler (1.0.1)
     method_source (1.0.0)
     mime-types (3.4.1)
@@ -409,6 +420,7 @@ GEM
     minitest (5.17.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
+    multi_xml (0.6.0)
     multipart-post (2.1.1)
     net-imap (0.3.6)
       date
@@ -432,6 +444,13 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.2)
       sidekiq (>= 3.5)
       statsd-ruby (~> 1.4, >= 1.4.0)
+    oauth2 (2.0.9)
+      faraday (>= 0.17.3, < 3.0)
+      jwt (>= 1.0, < 3.0)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 4)
+      snaky_hash (~> 2.0)
+      version_gem (~> 1.1)
     oj (3.13.23)
     omniauth (1.9.2)
       hashie (>= 3.4.6)
@@ -440,6 +459,11 @@ GEM
       addressable (~> 2.3)
       nokogiri (~> 1.5)
       omniauth (~> 1.2)
+    omniauth-oauth2 (1.7.3)
+      oauth2 (>= 1.4, < 3)
+      omniauth (>= 1.9, < 3)
+    omniauth-pixiv-public (0.1.9)
+      omniauth-oauth2 (>= 1.0)
     omniauth-rails_csrf_protection (0.1.2)
       actionpack (>= 4.2)
       omniauth (>= 1.3.1)
@@ -663,6 +687,9 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
+    snaky_hash (2.0.1)
+      hashie
+      version_gem (~> 1.1, >= 1.1.1)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -689,6 +716,7 @@ GEM
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
     thor (1.2.2)
+    thread_safe (0.3.6)
     tilt (2.0.11)
     timeout (0.3.2)
     tpm-key_attestation (0.11.0)
@@ -723,6 +751,7 @@ GEM
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
+    version_gem (1.1.3)
     warden (1.2.9)
       rack (>= 2.0.9)
     webauthn (2.5.2)
@@ -826,12 +855,14 @@ DEPENDENCIES
   oj (~> 3.13)
   omniauth (~> 1.9)
   omniauth-cas (~> 2.0)
+  omniauth-pixiv-public
   omniauth-rails_csrf_protection (~> 0.1)
   omniauth-saml (~> 1.10)
   ox (~> 2.14)
   parslet
   pg (~> 1.4)
   pghero
+  pixiv_api!
   pkg-config (~> 1.5)
   posix-spawn
   premailer-rails
@@ -886,3 +917,9 @@ DEPENDENCIES
   webpacker (~> 5.4)
   webpush!
   xorcist (~> 1.1)
+
+RUBY VERSION
+   ruby 3.0.6p216
+
+BUNDLED WITH
+   2.2.33

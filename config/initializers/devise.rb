@@ -361,6 +361,23 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  config.omniauth_path_prefix = '/auth/oauth'
+
+  Rails.application.secrets.oauth[:pixiv].tap do |secret|
+    omniauth = [
+      :pixiv,
+      secret[:key],
+      secret[:secret],
+      scope: 'read-email read-favorite-users read-profile',
+      user_agent: 'pawoo (omniauth-pixiv-public)',
+      pkce: true,
+    ]
+
+    client_options = secret.slice(:site, :authorize_url, :token_url).symbolize_keys.compact
+    omniauth.last.merge!(client_options: client_options) if client_options.present?
+
+    config.omniauth(*omniauth)
+  end
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
