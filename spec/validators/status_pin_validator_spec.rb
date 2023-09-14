@@ -53,5 +53,14 @@ RSpec.describe StatusPinValidator, type: :validator do
         expect(errors).to have_received(:add).with(:base, I18n.t('statuses.pin_errors.limit'))
       end
     end
+
+    context 'when status has time limit tag' do
+      let(:tag) { Fabricate(:tag, name: 'exp1d') }
+      let(:status) { Fabricate(:status, tags: [tag], local: true, visibility: :public) }
+
+      it 'calls errors.add' do
+        expect(pin.errors).to have_received(:add).with(:base, I18n.t('pawoo.extensions.statuses.pin_errors.time_limit'))
+      end
+    end
   end
 end
