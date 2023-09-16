@@ -4,6 +4,7 @@ class Auth::PasswordsController < Devise::PasswordsController
   skip_before_action :require_no_authentication, only: [:edit, :update]
   before_action :check_validity_of_reset_password_token, only: :edit
   before_action :set_body_classes
+  prepend_before_action :check_captcha, only: [:create]
 
   layout 'auth'
 
@@ -18,6 +19,17 @@ class Auth::PasswordsController < Devise::PasswordsController
   end
 
   private
+
+  def check_captcha
+    return if verify_recaptcha(action: 'password/reset')
+
+    self.resource = resource_class.new
+
+    respond_with_navigational(resource) do
+      flash.discard(:recaptcha_error) # We need to discard flash to avoid showing it on the next page reload
+      render :new
+    end
+  end
 
   def check_validity_of_reset_password_token
     unless reset_password_token_is_valid?

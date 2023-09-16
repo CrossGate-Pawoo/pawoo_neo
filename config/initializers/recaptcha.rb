@@ -7,8 +7,8 @@ Recaptcha.configure do |config|
   else
     # test keys
     # https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
-    config.site_key = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-    config.secret_key = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+    config.site_key = '6Ldf3ycoAAAAAJ9I7uJphNXqQXF1M7NPRLIpwuwb'
+    config.secret_key = '6Ldf3ycoAAAAAGYtkln8CJKmgoF83UmxGyVzYnF9'
   end
 end
 

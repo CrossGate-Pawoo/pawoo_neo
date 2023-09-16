@@ -4,7 +4,7 @@ module Pawoo::Auth::RegistrationsControllerConcern
   extend ActiveSupport::Concern
 
   def create
-    if verify_recaptcha
+    if verify_recaptcha(action: 'registration')
       super
     else
       build_resource(sign_up_params)

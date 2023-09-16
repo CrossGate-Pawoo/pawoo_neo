@@ -39,7 +39,7 @@
 
   .recaptcha
     = flash[:recaptcha_error]
-    = recaptcha_tags nonce: content_security_policy_nonce
+    = recaptcha_v3(action: 'registration')
 
   .actions
     = f.button :button, @invite.present? ? t('auth.register') : sign_up_message, type: :submit
