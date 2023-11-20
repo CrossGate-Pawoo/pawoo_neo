@@ -4,15 +4,14 @@ module Pawoo::Auth::RegistrationsControllerConcern
   extend ActiveSupport::Concern
 
   def create
-    super
-    # if verify_recaptcha
-    #   super
-    # else
-    #   build_resource(sign_up_params)
-    #   resource.validate # Look for any other validation errors besides Recaptcha
-    #   set_minimum_password_length
-    #   render :new
-    # end
+    if verify_recaptcha(action: 'registration')
+      super
+    else
+      build_resource(sign_up_params)
+      resource.validate # Look for any other validation errors besides Recaptcha
+      set_minimum_password_length
+      render :new
+    end
   end
 
   def update

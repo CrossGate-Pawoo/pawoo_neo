@@ -24,6 +24,7 @@ class ProcessMentionsService < BaseService
   private
 
   def scan_text!
+    enabled_time_limit = Pawoo::TimeLimit.enabled?(@status)
     @status.text = @status.text.gsub(Account::MENTION_RE) do |match|
       username, domain = Regexp.last_match(1).split('@')
 
@@ -39,6 +40,9 @@ class ProcessMentionsService < BaseService
 
       # Unapproved and unconfirmed accounts should not be mentionable
       next match if mentioned_account&.local? && !(mentioned_account.user_confirmed? && mentioned_account.user_approved?)
+
+      # If status enables time limit and mentions an activity pub user, ignore it
+      next match if !mentioned_account.local? && mentioned_account.activitypub? && enabled_time_limit
 
       # If the account cannot be found or isn't the right protocol,
       # first try to resolve it

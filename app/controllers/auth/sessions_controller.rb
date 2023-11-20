@@ -8,6 +8,7 @@ class Auth::SessionsController < Devise::SessionsController
   skip_before_action :update_user_sign_in
 
   prepend_before_action :check_suspicious!, only: [:create]
+  prepend_before_action :check_captcha, only: [:create]
 
   include TwoFactorAuthenticationConcern
 
@@ -98,6 +99,17 @@ class Auth::SessionsController < Devise::SessionsController
   end
 
   private
+
+  def check_captcha
+    return if verify_recaptcha(action: 'login')
+
+    self.resource = resource_class.new sign_in_params
+
+    respond_with_navigational(resource) do
+      flash.discard(:recaptcha_error) # We need to discard flash to avoid showing it on the next page reload
+      render :new
+    end
+  end 
 
   def set_instance_presenter
     @instance_presenter = InstancePresenter.new

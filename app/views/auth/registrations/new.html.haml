@@ -37,9 +37,9 @@
   .fields-group
     = f.input :agreement, as: :boolean, wrapper: :with_label, label: t('auth.privacy_policy_agreement_html', rules_path: about_more_path, privacy_policy_path: privacy_policy_path), required: true
 
-  -# .recaptcha
-  -#   = flash[:recaptcha_error]
-  -#   = recaptcha_tags nonce: content_security_policy_nonce
+  .recaptcha
+    = flash[:recaptcha_error]
+    = recaptcha_v3(action: 'registration')
 
   .actions
     = f.button :button, @invite.present? ? t('auth.register') : sign_up_message, type: :submit

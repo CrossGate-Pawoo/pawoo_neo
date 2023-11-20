@@ -7,6 +7,10 @@
   .fields-group
     = f.input :email, autofocus: true, wrapper: :with_label, label: t('simple_form.labels.defaults.email'), input_html: { 'aria-label': t('simple_form.labels.defaults.email') }, hint: false
 
+  .recaptcha
+    = flash[:recaptcha_error]
+    = recaptcha_v3(action: 'password/reset')
+
   .actions
     = f.button :button, t('auth.reset_password'), type: :submit
 

@@ -4334,5 +4334,30 @@
       }
     ],
     "path": "app/javascript/mastodon/features/video/index.json"
+  },
+  {
+    "descriptors": [
+      {
+        "defaultMessage": "{days, number} {days, plural, one {day} other {days}} later",
+        "id": "pawoo.time_limit.days"
+      },
+      {
+        "defaultMessage": "{hours, number} {hours, plural, one {hour} other {hours}} later",
+        "id": "pawoo.time_limit.hours"
+      },
+      {
+        "defaultMessage": "{minutes, number} {minutes, plural, one {minute} other {minutes}} later",
+        "id": "pawoo.time_limit.minutes"
+      },
+      {
+        "defaultMessage": "Specify the time of automatic disappearance (Beta)",
+        "id": "pawoo.time_limit.select_time_limit"
+      },
+      {
+        "defaultMessage": "Note: If specified, it will not be delivered to external instances.",
+        "id": "pawoo.time_limit.time_limit_note"
+      }
+    ],
+    "path": "app/javascript/pawoo/components/time_limit_dropdown.json"
   }
 ]

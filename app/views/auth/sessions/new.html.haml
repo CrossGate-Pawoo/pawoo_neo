@@ -16,6 +16,10 @@
     .fields-group
       = f.input :password, wrapper: :with_label, label: t('simple_form.labels.defaults.password'), input_html: { 'aria-label': t('simple_form.labels.defaults.password'), autocomplete: 'current-password' }, hint: false
 
+    .recaptcha
+      = flash[:recaptcha_error]
+      = recaptcha_v3(action: 'login')
+    
     .actions
       = f.button :button, t('auth.login'), type: :submit
 

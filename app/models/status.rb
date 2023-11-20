@@ -228,7 +228,7 @@ class Status < ApplicationRecord
   end
 
   def distributable?
-    public_visibility? || unlisted_visibility?
+    public_visibility? || unlisted_visibility? || Pawoo::TimeLimit.enabled?(self)
   end
 
   alias sign? distributable?
