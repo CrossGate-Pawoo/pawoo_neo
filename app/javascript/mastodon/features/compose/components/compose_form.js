@@ -284,7 +284,7 @@ class ComposeForm extends ImmutablePureComponent {
         >
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
 
-          <PawooTimeLimitDropdownContainer onSelectTimeLimit={this.handleSelectTimeLimit} />
+          {/* <PawooTimeLimitDropdownContainer onSelectTimeLimit={this.handleSelectTimeLimit} /> */}
           
           <div className='compose-form__modifiers'>
             <UploadFormContainer />
