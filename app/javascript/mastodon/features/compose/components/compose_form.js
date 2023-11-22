@@ -20,6 +20,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import { length } from 'stringz';
 import { countableText } from '../util/counter';
 import Icon from 'mastodon/components/icon';
+import PawooTimeLimitDropdownContainer from 'pawoo/containers/time_limit_dropdown_container';
 
 const allowedAroundShortCode = '><\u0085\u0020\u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u202f\u205f\u3000\u2028\u2029\u0009\u000a\u000b\u000c\u000d';
 
@@ -65,6 +66,9 @@ class ComposeForm extends ImmutablePureComponent {
     isInReply: PropTypes.bool,
     singleColumn: PropTypes.bool,
     lang: PropTypes.string,
+    onSelectTimeLimit: PropTypes.func.isRequired,
+    pawooKeepCaretPosition: PropTypes.bool.isRequired,
+    pawooOnInsertHashtag: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -131,6 +135,15 @@ class ComposeForm extends ImmutablePureComponent {
     this.props.onChangeSpoilerText(e.target.value);
   };
 
+  getSnapshotBeforeUpdate() {
+    let pawooPrevCaretPosition = null;
+    if (this.props.pawooKeepCaretPosition) {
+      pawooPrevCaretPosition = this.autosuggestTextarea.textarea.selectionStart;
+    }
+
+    return { pawooPrevCaretPosition };
+  }
+
   handleFocus = () => {
     if (this.composeForm && !this.props.singleColumn) {
       const { left, right } = this.composeForm.getBoundingClientRect();
@@ -144,11 +157,11 @@ class ComposeForm extends ImmutablePureComponent {
     this._updateFocusAndSelection({ });
   }
 
-  componentDidUpdate (prevProps) {
-    this._updateFocusAndSelection(prevProps);
+  componentDidUpdate(prevProps, prevState, { pawooPrevCaretPosition }) {
+    this._updateFocusAndSelection(prevProps, pawooPrevCaretPosition);
   }
 
-  _updateFocusAndSelection = (prevProps) => {
+  _updateFocusAndSelection = (prevProps, pawooPrevCaretPosition) => {
     // This statement does several things:
     // - If we're beginning a reply, and,
     //     - Replying to zero or one users, places the cursor at the end of the textbox.
@@ -163,6 +176,9 @@ class ComposeForm extends ImmutablePureComponent {
       } else if (typeof this.props.caretPosition === 'number') {
         selectionStart = this.props.caretPosition;
         selectionEnd   = this.props.caretPosition;
+      } else if (pawooPrevCaretPosition) {
+        selectionStart = pawooPrevCaretPosition;
+        selectionEnd = pawooPrevCaretPosition
       } else {
         selectionEnd   = this.props.text.length;
         selectionStart = selectionEnd;
@@ -205,6 +221,10 @@ class ComposeForm extends ImmutablePureComponent {
 
     this.props.onPickEmoji(position, data, needsSpace);
   };
+
+  handleSelectTimeLimit = (data) => {
+    this.props.onSelectTimeLimit(data);
+  }
 
   render () {
     const { intl, onPaste, autoFocus } = this.props;
@@ -264,6 +284,8 @@ class ComposeForm extends ImmutablePureComponent {
         >
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
 
+          {/* <PawooTimeLimitDropdownContainer onSelectTimeLimit={this.handleSelectTimeLimit} /> */}
+          
           <div className='compose-form__modifiers'>
             <UploadFormContainer />
             <PollFormContainer />

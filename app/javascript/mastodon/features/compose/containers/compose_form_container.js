@@ -10,6 +10,9 @@ import {
   insertEmojiCompose,
   uploadCompose,
 } from '../../../actions/compose';
+import {
+  insertTagCompose,
+} from 'pawoo/actions/extensions/compose';
 
 const mapStateToProps = state => ({
   text: state.getIn(['compose', 'text']),
@@ -27,6 +30,7 @@ const mapStateToProps = state => ({
   anyMedia: state.getIn(['compose', 'media_attachments']).size > 0,
   isInReply: state.getIn(['compose', 'in_reply_to']) !== null,
   lang: state.getIn(['compose', 'language']),
+  pawooKeepCaretPosition: state.getIn(['compose', 'pawooKeepCaretPosition']),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -61,6 +65,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onPickEmoji (position, data, needsSpace) {
     dispatch(insertEmojiCompose(position, data, needsSpace));
+  },
+
+  onSelectTimeLimit(tag) {
+    dispatch(insertTagCompose(tag));
   },
 
 });
